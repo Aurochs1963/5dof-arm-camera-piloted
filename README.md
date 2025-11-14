@@ -48,7 +48,7 @@ Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans 
 │── images_bras/            # Dossier pour les images du bras
 │   ├── img....
 │
-
+```
 
 ## Structure du robot
 
