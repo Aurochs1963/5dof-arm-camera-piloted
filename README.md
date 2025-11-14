@@ -54,6 +54,10 @@ Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans 
 
 ![image 1](/concept/5dofs_arm_3.jpg)
 
+Image avec la position des axes des servos
+
+![image 1](/concept/5dofs_arm_4.jpg)
+
 ## Dépendances et Installation
 
 
@@ -61,6 +65,7 @@ Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans 
 
 ```bash
 pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
+
 ```
 
 ## Configuration et Exécution
