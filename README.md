@@ -7,7 +7,9 @@ Piloter avec une caméra un bras motorisé (5DOF + Gripper) afin de saisir un ob
 1) Déterminer la position d'un objet avec une caméra et des marqueurs Aruco
 
 Plan : 4 marqueurs ARUCO
+
 Objet: 1 marqueur ARUCO
+
 Export de la position de l'objet dans dans un fichier JSON
  data={x,y,z,xmoy,ymoy,zmoy}
 
