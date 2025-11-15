@@ -92,17 +92,27 @@ Les mesures :
 Paramètres DH
 
  Format: [a, alpha, d, theta]
+ 
  Convention: J2=0 -> bras horizontal vers l'avant
+ 
              J2>0 -> bras monte
+
              J2<0 -> bras descend
 
 dh_params = [		
+
 	[0           , np.pi/2, self.L['L1'], θ[0]],               		 J1: Base (rotation azimutale)
+
 	[self.L['L2'], 0      , 0           , θ[1]+np.pi/2],       		 J2: Épaule (offset +90° pour horizontal à 0)
+
 	[self.L['L3'], 0      , 0           , θ[2]-np.pi/2],       		 J3: Coude
+
 	[0           , np.pi/2, 0           , θ[3]+np.pi/2],       		 J4: Poignet 1 (rotation dans le plan)
+
 	[0           ,0       ,self.L['L4'] , θ[4]],               		 J5: Poignet 2 (rotation finale yaw)
+
 	[0           ,0       ,self.L['L5'] , 0]                   		 Effecteur (grippeur)
+
 ]		
 
 
