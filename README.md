@@ -132,7 +132,13 @@ pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
 
 ### Sur un PC Standard (Webcam USB)
 
-![video 1](/images_bras/move_bras.gif)
+1. python Aruco_detection.py
+
+![image 6](/images_bras/find_obj_coord.jpg)
+
+2. python robot_arm_inverse_k.py
+
+![gif 1](/images_bras/move_bras.gif)
 
 ## Notes et Points d'Attention
 
