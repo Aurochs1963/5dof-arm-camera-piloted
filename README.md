@@ -43,20 +43,33 @@ Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans 
 ├── camera_calibration.npz  # Données de calibration de la caméra
 ├── positions.json          # Données de position de l'objet
 ├── description.xlsx        # Données de paramétrage du robot pour la matrice (IK/DH parameters) utilisée pour calculer la position du bras 
-├── concept/                # Répertoire contenant le concept
+├── aruco/                  # Répertoire contenant les marqueurs aruco à imprimer
+│   ├── *.svg
+├── calibration/            # Répertoire contenant les fichiers de calibration de la caméra
+│   ├── *.npz
+├── concept/                # Répertoire contenant les images du concept
 │   ├── img....
 │── images_bras/            # Dossier pour les images du bras
 │   ├── img....
 │
 ```
 
-
+## Le bras avec 5DOF + Gripper
 
 ![image 3](/concept/5dofs_arm_3.jpg)
 
 Image avec la position des axes des servos
 
 ![image 4](/concept/5dofs_arm_4.jpg)
+
+
+## La carte de pilotage du robot (RTrobot 32 channels)
+
+Carte de pilotage du robot pilotée via le port série ou usb du PC
+
+![image 7](/images_bras/RTrobot_32.jpg)
+
+![image 8](/images_bras/RTrobot_command.jpg)
 
 ## Définition géométrique du robot et des paramètres DH
 
