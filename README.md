@@ -71,11 +71,11 @@ Les éléments constitutifs du robot sont :
 
 Les 5 articulations (joints) sont :
 
-Base (J1) : Rotation autour de l'axe vertical (rotation azimutale)
-Épaule (J2) : Rotation qui lève/baisse le bras
-Coude (J3) : Rotation qui plie le bras
-Poignet 1 (J4) : Rotation qui plie le poignet
-Poignet 2 (J5) : Rotation finale de l'effecteur (yaw)
+1. Base (J1) : Rotation autour de l'axe vertical (rotation azimutale)
+2. Épaule (J2) : Rotation qui lève/baisse le bras
+3. Coude (J3) : Rotation qui plie le bras
+4. Poignet 1 (J4) : Rotation qui plie le poignet
+5. Poignet 2 (J5) : Rotation finale de l'effecteur (yaw)
 
 Gripper : Généralement considéré à part (ouverture/fermeture)
 
@@ -132,7 +132,7 @@ pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
 
 ### Sur un PC Standard (Webcam USB)
 
-![video 1](/images_bras/20251111_163113.mp4)
+![video 1](/images_bras/move_bras.gif)
 
 ## Notes et Points d'Attention
 
