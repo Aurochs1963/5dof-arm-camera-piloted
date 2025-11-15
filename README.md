@@ -50,13 +50,61 @@ Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans 
 │
 ```
 
-## Structure du robot
 
-![image 1](/concept/5dofs_arm_3.jpg)
+
+![image 3](/concept/5dofs_arm_3.jpg)
 
 Image avec la position des axes des servos
 
-![image 1](/concept/5dofs_arm_4.jpg)
+![image 4](/concept/5dofs_arm_4.jpg)
+
+## Définition géométrique du robot et des paramètres DH
+
+Les éléments constitutifs du robot sont :
+
+1. Base – rotation autour de l’axe vertical (yaw)
+2. Épaule – élévation/abaissement du bras
+3. Coude – pliure principale
+4. Poignet (pitch) – inclinaison vers le haut/bas
+5. Poignet (yaw) – rotation du poignet
+6. Gripper – ouverture/fermeture de la pince
+
+Les 5 articulations (joints) sont :
+
+Base (J1) : Rotation autour de l'axe vertical (rotation azimutale)
+Épaule (J2) : Rotation qui lève/baisse le bras
+Coude (J3) : Rotation qui plie le bras
+Poignet 1 (J4) : Rotation qui plie le poignet
+Poignet 2 (J5) : Rotation finale de l'effecteur (yaw)
+
+Gripper : Généralement considéré à part (ouverture/fermeture)
+
+Les mesures : 
+
+	'L1': 0.082,  # Hauteur de la base (du sol au centre de l'axe du bas de l'épaule)
+	'L2': 0.099,  # Longueur bras supérieur (épaule-coude)
+	'L3': 0.134,  # Longueur avant-bras (coude-poignet)
+	'L4': 0.070,  # Longueur poignet (offset vertical)
+	'L5': 0.075   # Longueur effecteur final (offset vertical)
+
+![image 5](/concept/5dofs_arm_5.jpg)
+
+Paramètres DH
+
+ Format: [a, alpha, d, theta]
+ Convention: J2=0 -> bras horizontal vers l'avant
+             J2>0 -> bras monte
+             J2<0 -> bras descend
+
+dh_params = [		
+	[0           , np.pi/2, self.L['L1'], θ[0]],               		 J1: Base (rotation azimutale)
+	[self.L['L2'], 0      , 0           , θ[1]+np.pi/2],       		 J2: Épaule (offset +90° pour horizontal à 0)
+	[self.L['L3'], 0      , 0           , θ[2]-np.pi/2],       		 J3: Coude
+	[0           , np.pi/2, 0           , θ[3]+np.pi/2],       		 J4: Poignet 1 (rotation dans le plan)
+	[0           ,0       ,self.L['L4'] , θ[4]],               		 J5: Poignet 2 (rotation finale yaw)
+	[0           ,0       ,self.L['L5'] , 0]                   		 Effecteur (grippeur)
+]		
+
 
 ## Dépendances et Installation
 
