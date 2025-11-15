@@ -93,7 +93,9 @@ Paramètres DH
 
  Format: [a, alpha, d, theta]
  
- Convention: J2=0 -> bras horizontal vers l'avant
+ Convention: 
+ 
+             J2=0 -> bras horizontal vers l'avant
  
              J2>0 -> bras monte
 
@@ -130,6 +132,7 @@ pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
 
 ### Sur un PC Standard (Webcam USB)
 
+![video 1](/images_bras/20251111_163113.mp4)
 
 ## Notes et Points d'Attention
 
