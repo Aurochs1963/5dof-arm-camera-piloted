@@ -14,7 +14,7 @@ plan_ids = [1, 2, 3, 4]     # IDs des coins
 object_marker_length = 18.0 # mm
 object_height = 38.0         # mm
 REFERENCE_Z = "dessus"      # "dessus", "centre" ou "dessus"
-csv_filename = "positions.csv"
+json_filename = "positions.json"
  
 # --- Zoom sur l'objet détecté ---
 zoom_factor = 3.0
@@ -184,7 +184,7 @@ while True:
 
             data = {"frame":frame_count,"x":round(x, 1),"y":round(y, 1),"z":round(z, 1),"xmoy":round(xmoy, 1),"ymoy":round(ymoy, 1),"zmoy":round(zmoy, 1)}
 
-            with open("positions.json","w") as f:
+            with open(json_filename,"w") as f:
                json.dump(data,f)
 
             # --- Affichage ---
