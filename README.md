@@ -12,7 +12,7 @@ Plan : 4 marqueurs ARUCO
 
 Objet: 1 marqueur ARUCO
 
-Exporter la position de l'objet détecté sur le p^lan dans dans un fichier JSON
+Exporter la position de l'objet détecté sur le plan dans dans un fichier JSON
  data={x,y,z,xmoy,ymoy,zmoy}
 
 ![image 1](/concept/5dofs_arm_1.jpg)
