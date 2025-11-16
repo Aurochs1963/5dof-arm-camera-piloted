@@ -145,9 +145,15 @@ pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
 
 ### Sur un PC Standard (Webcam USB)
 
+Ouvrir deux terminaux de commade :
+
+Dans le premier :
+
 1. python Aruco_detection.py
 
 ![image 6](/images_bras/find_obj_coord.jpg)
+
+Dans le deuxième :
 
 2. python robot_arm_inverse_k.py
 
