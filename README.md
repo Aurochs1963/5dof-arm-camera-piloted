@@ -161,6 +161,15 @@ Dans le deuxième :
 
 ## Notes et Points d'Attention
 
+Le réferentiel "monde" contenant le plan et l'objet ont X=0, Y=0, Z=0 au centre du plan délimité par les 4 marqueurs.
 
+La position du pot est fixe , il faut rentrer ses coordonnées en mm dans le programme robot_arm_inverse_k.py à la ligne contenant :
 
+        #Drop the parcel
+        x=40
+        y=109.6
+        z=150
 
+La valeur z = 150 est pour indiquer à quelle hauteur doit se positionner le bras avant de lacher l'objet.
+
+Le positionnemt du bras sur le plan et les différentes mesures sont les points les plus délicats à mesurer car cela influe directement sur le bon calcul de position en Kinematic Inverse.
