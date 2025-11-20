@@ -1,175 +1,189 @@
-# 📁 Projet 5dof-arm-camera-piloted
+# 🤖 Projet de Bras Robotique 5-DOF Piloté par Caméra
 
-## Description Générale
+## 🎯 Objectif du Projet
 
-Piloter avec une caméra un bras motorisé (5DOF + Gripper) afin de saisir un objet et le déplacer dans un pot
+Ce projet a pour but de piloter un bras robotique à 5 degrés de liberté (5-DOF) et une pince (gripper) à l'aide d'une caméra. L'objectif est de détecter un objet marqué par un tag ArUco, de le saisir, puis de le déposer dans un emplacement prédéfini (un pot).
 
-Il y a deux programmes : 
+Le système se compose de deux applications principales qui communiquent via un fichier JSON :
 
-Programme 1) Déterminer la position d'un objet avec une caméra et des marqueurs Aruco (Aruco_detection.py)
+1.  **Détection par Caméra (`Aruco_detection.py`)**:
+    *   Utilise une caméra pour identifier un plan de travail défini par 4 marqueurs ArUco.
+    *   Détecte un objet cible portant un autre marqueur ArUco.
+    *   Calcule les coordonnées 3D (x, y, z) de l'objet par rapport au centre du plan.
+    *   Exporte ces coordonnées en temps réel dans le fichier `positions.json`.
 
-Plan : 4 marqueurs ARUCO
+2.  **Contrôle du Bras (`robot_arm_inverse_k.py`)**:
+    *   Lit les coordonnées de l'objet depuis `positions.json`.
+    *   Utilise la **cinématique inverse** pour calculer les angles de rotation nécessaires pour chaque servo du bras.
+    *   Génère et envoie les commandes de mouvement à la carte de contrôle du bras via une liaison série.
+    *   Exécute une séquence complète : approcher, saisir, soulever, déplacer et déposer l'objet.
 
-Objet: 1 marqueur ARUCO
-
-Exporter la position de l'objet détecté sur le plan dans dans un fichier JSON
- data={x,y,z,xmoy,ymoy,zmoy}
+!Concept du projet
 
 ![image 1](/concept/5dofs_arm_1.jpg)
-
-Programme 2) Récupérer la position de l'objet, le prendre et le déposer dans un pot (robot_arm_inverse_k.py)
-
-- Lire la position de  l'objet (json)
-- Placer le bras au dessus de l'objet
-- Prendre l'objet
-- Relever le bras
-- Déplacer le bras au dessus du pot
-- Lâcher l'objet dans le pot
-
 ![image 2](/concept/5dofs_arm_2.jpg)
 
---> Transformer les coordonnées x,y,z de l'objet en angles de rotation des servos du bras (Inverse Kinematics).
-
-
-## Structure des Fichiers
+## 📂 Structure des Fichiers
 
 ```
-/project-root
-│
-├── README.md               # Ce fichier
-├── Aruco_detection.py      # Application de détection de l'objet via la caméra
-├── robot_arm_inverse_k.py  # Application de pilotage du bras
-├── utils_servos.py         # Utilitaires de pilotage des servos
-├── camera_calibration.npz  # Données de calibration de la caméra
-├── positions.json          # Données de position de l'objet
-├── description.xlsx        # Données de paramétrage du robot pour la matrice (IK/DH parameters) utilisée pour calculer la position du bras 
-├── aruco/                  # Répertoire contenant les marqueurs aruco à imprimer
-│   ├── *.svg
-├── calibration/            # Répertoire contenant les fichiers de calibration de la caméra
-│   ├── *.npz
-├── concept/                # Répertoire contenant les images du concept
-│   ├── img....
-│── images_bras/            # Dossier pour les images du bras
-│   ├── img....
-│
+/
+├── README.md               # Ce fichier de documentation
+├── Aruco_detection.py      # Script de détection de l'objet par caméra
+├── robot_arm_inverse_k.py  # Script de pilotage du bras (cinématique inverse)
+├── utils_servos.py         # Fonctions utilitaires pour le contrôle des servos
+├── camera_calibration.npz  # Fichier de données de calibration de la caméra
+├── positions.json          # Fichier d'échange de coordonnées (généré par Aruco_detection.py)
+├── description.xlsx        # Paramètres DH et configuration du robot
+├── aruco/                    # Marqueurs ArUco à imprimer
+├── calibration/            # Scripts et images pour la calibration de la caméra
+└── concept/                  # Images et schémas conceptuels du projet
 ```
 
-## Le bras avec 5DOF + Gripper
+## 🛠️ Matériel Requis
+
+1.  **Bras Robotique** : Un bras 5-DOF avec une pince (gripper).
+2.  **Carte de Contrôle** : Une carte de contrôle pour servos, comme la **RTrobot 32 channels**, connectée au PC via USB/Série.
+3.  **Caméra** : Une webcam USB standard.
+4.  **Marqueurs ArUco** :
+    *   4 marqueurs `DICT_4X4_50` (IDs: 1, 2, 3, 4) pour délimiter le plan.
+    *   1 marqueur `DICT_ARUCO_ORIGINAL` pour l'objet.
+
+!Schéma des axes du bras
 
 ![image 3](/concept/5dofs_arm_3.jpg)
 
-Image avec la position des axes des servos
+!Image avec la position des axes des servos
 
 ![image 4](/concept/5dofs_arm_4.jpg)
 
-
-## La carte de pilotage du robot (RTrobot 32 channels)
-
-Carte de pilotage du robot pilotée via le port série ou usb du PC
+!Carte de pilotage du robot pilotée via le port série ou usb du PC
 
 ![image 7](/images_bras/RTrobot_32.jpg)
 
 ![image 8](/images_bras/RTrobot_command.jpg)
 
-## Définition géométrique du robot et des paramètres DH
 
-Les éléments constitutifs du robot sont :
+## ⚙️ Définition Géométrique et Paramètres DH
 
-1. Base – rotation autour de l’axe vertical (yaw)
-2. Épaule – élévation/abaissement du bras
-3. Coude – pliure principale
-4. Poignet (pitch) – inclinaison vers le haut/bas
-5. Poignet (yaw) – rotation du poignet
-6. Gripper – ouverture/fermeture de la pince
+Le bras est modélisé avec 5 articulations (joints) et des segments de longueurs fixes. Ces paramètres sont essentiels pour les calculs de cinématique.
 
-Les 5 articulations (joints) sont :
+### Longueurs des Segments
 
-1. Base (J1) : Rotation autour de l'axe vertical (rotation azimutale)
-2. Épaule (J2) : Rotation qui lève/baisse le bras
-3. Coude (J3) : Rotation qui plie le bras
-4. Poignet 1 (J4) : Rotation qui plie le poignet
-5. Poignet 2 (J5) : Rotation finale de l'effecteur (yaw)
+Les longueurs sont définies dans `robot_arm_inverse_k.py` :
+*   `L1`: 8.2 cm (Hauteur de la base)
+*   `L2`: 9.9 cm (Bras supérieur : épaule -> coude)
+*   `L3`: 13.4 cm (Avant-bras : coude -> poignet)
+*   `L4`: 7.0 cm (Longueur du poignet)
+*   `L5`: 7.5 cm (Longueur de l'effecteur final)
 
-Gripper : Généralement considéré à part (ouverture/fermeture)
-
-Les mesures : 
-
-	'L1': 0.082,  # Hauteur de la base (du sol au centre de l'axe du bas de l'épaule)
-	'L2': 0.099,  # Longueur bras supérieur (épaule-coude)
-	'L3': 0.134,  # Longueur avant-bras (coude-poignet)
-	'L4': 0.070,  # Longueur poignet (offset vertical)
-	'L5': 0.075   # Longueur effecteur final (offset vertical)
-
+!Mesures du bras
 ![image 5](/concept/5dofs_arm_5.jpg)
 
-Paramètres DH
+### Paramètres Denavit-Hartenberg (DH)
 
- Format: [a, alpha, d, theta]
- 
- Convention: 
- 
-             J2=0 -> bras horizontal vers l'avant
- 
-             J2>0 -> bras monte
+Les paramètres DH sont utilisés pour calculer la position de l'effecteur (cinématique directe). Le format est `[a, alpha, d, theta]`.
 
-             J2<0 -> bras descend
-
-dh_params = [		
-
-	[0           , np.pi/2, self.L['L1'], θ[0]],               		 J1: Base (rotation azimutale)
-
-	[self.L['L2'], 0      , 0           , θ[1]+np.pi/2],       		 J2: Épaule (offset +90° pour horizontal à 0)
-
-	[self.L['L3'], 0      , 0           , θ[2]-np.pi/2],       		 J3: Coude
-
-	[0           , np.pi/2, 0           , θ[3]+np.pi/2],       		 J4: Poignet 1 (rotation dans le plan)
-
-	[0           ,0       ,self.L['L4'] , θ[4]],               		 J5: Poignet 2 (rotation finale yaw)
-
-	[0           ,0       ,self.L['L5'] , 0]                   		 Effecteur (grippeur)
-
-]		
-
-
-## Dépendances et Installation
-
-
-### Installation des Bibliothèques
-
-```bash
-pip install numpy cv2 json os scipy matplotlib mpl_toolkits serial time
-
+```python
+# Convention:
+# J2=0 -> bras horizontal vers l'avant
+# J2>0 -> bras monte
+dh_params = [
+    # J1: Base (rotation azimutale)
+    [0, np.pi/2, self.L['L1'], θ],
+    # J2: Épaule (offset +90° pour que 0° soit horizontal)
+    [self.L['L2'], 0, 0, θ + np.pi/2],
+    # J3: Coude
+    [self.L['L3'], 0, 0, θ - np.pi/2],
+    # J4: Poignet 1
+    [0, np.pi/2, 0, θ + np.pi/2],
+    # J5: Poignet 2 (rotation yaw)
+    [0, 0, self.L['L4'], θ],
+    # Effecteur (pince)
+    [0, 0, self.L['L5'], 0]
+]
 ```
 
-## Configuration et Exécution
+## 🚀 Installation et Configuration
 
-### Sur un PC Standard (Webcam USB)
+### 1. Dépendances Python
 
-Ouvrir deux terminaux de commade :
+Installez les bibliothèques nécessaires avec `pip` :
 
-Dans le premier :
+```bash
+pip install numpy opencv-python opencv-contrib-python pyserial matplotlib
+```
 
-1. python Aruco_detection.py
+### 2. Calibration de la Caméra
 
+La précision de la détection dépend d'une bonne calibration.
+*   Utilisez les scripts et images du dossier `/calibration` pour générer le fichier `camera_calibration.npz`.
+*   Si ce fichier est absent, `Aruco_detection.py` utilisera des valeurs par défaut, mais la précision sera faible.
+
+### 3. Configuration du Bras
+
+Le script `robot_arm_inverse_k.py` contient des paramètres importants à vérifier :
+
+*   **Port Série** : Assurez-vous que le port `COM` est correct.
+    ```python
+    ser = serial.Serial(port='COM3', baudrate=115200, timeout=0)
+    ```
+
+*   **Position de la Base** : Mesurez la position du centre de la base du robot par rapport au centre du plan de travail (défini par les marqueurs ArUco) et mettez à jour les coordonnées `(x, y, z)` en mètres.
+    ```python
+    # Position de la base du robot dans le repère "monde"
+    base = (-0.155, 0, 0)
+    robot = RobotArm5DOF(base_position=base)
+    ```
+
+*   **Position de Dépôt** : Configurez les coordonnées (en mm) où le bras doit déposer l'objet.
+    ```python
+    # Coordonnées pour déposer l'objet
+    x = 40
+    y = 109.6
+    z = 150 # Hauteur de sécurité avant de lâcher
+    ```
+
+*   **Correction de l'Effecteur** : Des deltas `dx`, `dy`, `dz` (en mètres) peuvent être ajustés pour compenser un décalage entre le centre du marqueur de l'objet et le point de saisie réel de la pince.
+    ```python
+    dx = 0.02
+    dy = 0.005
+    dz = 0.03
+    ```
+
+## ▶️ Exécution du Projet
+
+Pour lancer le système, ouvrez deux terminaux distincts.
+
+### Terminal 1 : Détection de l'Objet
+
+Lancez le script de détection. Une fenêtre s'ouvrira, affichant le flux de la caméra avec les marqueurs et les coordonnées calculées.
+
+```bash
+python Aruco_detection.py
+```
+
+!Fenêtre de détection
 ![image 6](/images_bras/find_obj_coord.jpg)
 
-Dans le deuxième :
+### Terminal 2 : Contrôle du Bras
 
-2. python robot_arm_inverse_k.py
+Lancez le script de contrôle du bras. Il attendra vos instructions pour démarrer la séquence de pick-and-place.
 
+```bash
+python robot_arm_inverse_k.py
+```
+
+Le script vous demandera :
+1.  `lecture valeur camera (o/n) ?` : Tapez `o` pour lire la dernière position depuis `positions.json`.
+2.  `Envoi de la position au robot (o/n) ?` : Tapez `o` pour envoyer la commande de mouvement au bras.
+
+Le bras exécutera alors la séquence pour saisir et déposer l'objet.
+
+!GIF du mouvement du bras
 ![gif 1](/images_bras/move_bras.gif)
 
-## Notes et Points d'Attention
+## ⚠️ Notes Importantes
 
-Le réferentiel "monde" contenant le plan et l'objet ont X=0, Y=0, Z=0 au centre du plan délimité par les 4 marqueurs.
-
-La position du pot est fixe , il faut rentrer ses coordonnées en mm dans le programme robot_arm_inverse_k.py à la ligne contenant :
-
-        #Drop the parcel
-        x=40
-        y=109.6
-        z=150
-
-La valeur z = 150 est pour indiquer à quelle hauteur doit se positionner le bras avant de lacher l'objet.
-
-Le positionnemt du bras sur le plan et les différentes mesures sont les points les plus délicats à mesurer car cela influe directement sur le bon calcul de position en Kinematic Inverse.
+*   **Précision des Mesures** : La performance du système dépend fortement de la précision des mesures physiques : longueurs des segments du bras, position de sa base, et calibration de la caméra. Toute erreur se répercutera sur la précision du positionnement.
+*   **Référentiel Monde** : Le point d'origine du repère monde (0,0,0) est le **centre du plan** délimité par les 4 marqueurs ArUco. Toutes les coordonnées sont calculées par rapport à ce point.
+*   **Sécurité** : Soyez prudent lors des premiers essais. Les mouvements du bras peuvent être inattendus. Gardez une main sur l'alimentation pour pouvoir l'arrêter en cas d'urgence.
