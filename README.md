@@ -180,6 +180,7 @@ Le script vous demandera :
 Le bras exécutera alors la séquence pour saisir et déposer l'objet.
 
 !GIF du mouvement du bras
+
 ![gif 1](/images_bras/move_bras.gif)
 
 ## ⚠️ Notes Importantes
