@@ -210,14 +210,18 @@ python robot_arm_inverse_km.py
 
 Le script vous demandera :
 
-1.  `lecture valeur camera (o/n) ?` : Tapez `o` pour lire la dernière position depuis `positions.json`.
+1.  `lecture valeur camera (o/n) ?` : Tapez `o` pour lire la dernière position depuis `multi_positions.json`.
 
 Affichage de la position des différents objets dont le pot (tag 531)
 
 --- Objets trouvés dans le fichier ---
+
 ID: 323 -> Données: {'x': 115.3, 'y': -81.6, 'z': 1.8, 'xmoy': 119.6, 'ymoy': -80.1, 'zmoy': 13.7}
+
 ID: 531 -> Données: {'x': 100.9, 'y': 77.8, 'z': 18.6, 'xmoy': 100.9, 'ymoy': 77.3, 'zmoy': 19.1}
+
 ID: 90 -> Données: {'x': 47.4, 'y': -115.5, 'z': 61.8, 'xmoy': 49.7, 'ymoy': -115.0, 'zmoy': 66.1}
+
 Position du pot (tag #531): xpot= 100.9 ypot= 77.8 zpot= 18.6
 
 Entrez l'ID de l'objet que vous souhaitez choisir (ex: 90) :
