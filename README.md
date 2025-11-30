@@ -183,6 +183,50 @@ Le bras exécutera alors la séquence pour saisir et déposer l'objet.
 
 ![gif 1](/images_bras/move_bras.gif)
 
+
+## ▶️ Version multi-objets
+
+Ces versions permettent de détecter la position de plusieurs objet y compris le pot.
+
+Dans cet exemple, les deux objet ont les tags 90 et 323 et le pot le tag 531
+
+Pour lancer le système, ouvrez deux terminaux distincts.
+
+### Terminal 1 : Détection des objets
+
+Lancez le script de détection. Une fenêtre s'ouvrira, affichant le flux de la caméra avec les marqueurs et les coordonnées calculées.
+
+```bash
+python Aruco_multi_detection.py
+```
+
+### Terminal 2 : Contrôle du Bras
+
+Lancez le script de contrôle du bras. Il attendra vos instructions pour démarrer la séquence de pick-and-place.
+
+```bash
+python robot_arm_inverse_km.py
+```
+
+Le script vous demandera :
+
+1.  `lecture valeur camera (o/n) ?` : Tapez `o` pour lire la dernière position depuis `positions.json`.
+
+Affichage de la position des différents objets dont le pot (tag 531)
+
+--- Objets trouvés dans le fichier ---
+ID: 323 -> Données: {'x': 115.3, 'y': -81.6, 'z': 1.8, 'xmoy': 119.6, 'ymoy': -80.1, 'zmoy': 13.7}
+ID: 531 -> Données: {'x': 100.9, 'y': 77.8, 'z': 18.6, 'xmoy': 100.9, 'ymoy': 77.3, 'zmoy': 19.1}
+ID: 90 -> Données: {'x': 47.4, 'y': -115.5, 'z': 61.8, 'xmoy': 49.7, 'ymoy': -115.0, 'zmoy': 66.1}
+Position du pot (tag #531): xpot= 100.9 ypot= 77.8 zpot= 18.6
+
+Entrez l'ID de l'objet que vous souhaitez choisir (ex: 90) :
+
+il faudra sélectionner l'ID d'un objet (sauf celui du pot ...) pour indiquer l'objet à prendre
+
+Le bras exécutera alors la séquence pour saisir et déposer l'objet dans le pot.
+
+
 ## ⚠️ Notes Importantes
 
 *   **Précision des Mesures** : La performance du système dépend fortement de la précision des mesures physiques : longueurs des segments du bras, position de sa base, et calibration de la caméra. Toute erreur se répercutera sur la précision du positionnement.
